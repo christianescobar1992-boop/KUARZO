@@ -1,6 +1,7 @@
 import AppFooter from "@/components/AppFooter";
 import AppHeader from "@/components/AppHeader";
 import { CardProduct } from "@/components/CardProduct";
+import { usePlatform } from "@/hooks/usePlatform";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -12,7 +13,6 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { usePlatform } from "@/hooks/usePlatform";
 
 type Producto = {
   id: string;
@@ -123,7 +123,13 @@ const secciones = [
   },
 ] as const;
 
-
+const PRODUCT_GRID_SPACING = {
+  itemHorizontalPadding: 8,
+  itemVerticalMargin: 32,
+  desktopWidth: "18.3%",
+  tabletWidth: "48%",
+  mobileWidth: "100%",
+};
 
 const CatalogoScreen = () => {
   const { width } = useWindowDimensions();
@@ -131,8 +137,9 @@ const CatalogoScreen = () => {
   const [grupoActivo, setGrupoActivo] = useState("TODOS");
   const [categoriaActiva, setCategoriaActiva] = useState("Todos");
 
+  const isMobileWidth = width < 680;
+  const isTabletWidth = width >= 680 && width < 980;
   const esDesktop = width >= 980;
-  const grillaCompacta = width >= 1220;
   const seccionActiva =
     secciones.find((seccion) => seccion.titulo === grupoActivo) ?? secciones[0];
   const productosFiltrados = productos.filter((producto) => {
@@ -252,21 +259,32 @@ const CatalogoScreen = () => {
 
                 <ScrollView
                   className="max-h-[600px]"
+                  contentContainerStyle={{ paddingBottom: 140 }}
                   nestedScrollEnabled={true}
                   showsVerticalScrollIndicator={true}
                 >
-                  <View className="flex-row flex-wrap gap-x-[1.75%]">
-                    {productosFiltrados.map((producto) => (
-                      <View
-                        key={producto.id}
-                        style={{
-                          width: esDesktop ? "18.6%" : "48.5%",
-                        }}
-                        className="mb-20"
-                      >
-                        <CardProduct producto={producto} />
-                      </View>
-                    ))}
+                  <View className="flex-row flex-wrap justify-between">
+                    {productosFiltrados.map((producto) => {
+                      const widthStyle = esDesktop
+                        ? PRODUCT_GRID_SPACING.desktopWidth
+                        : isTabletWidth
+                        ? PRODUCT_GRID_SPACING.tabletWidth
+                        : PRODUCT_GRID_SPACING.mobileWidth;
+
+                      return (
+                        <View
+                          key={producto.id}
+                          className={esDesktop ? "mb-8" : isTabletWidth ? "mb-8" : "mb-8 w-full"}
+                          style={{
+                            width: widthStyle,
+                            paddingHorizontal: esDesktop || isTabletWidth ? PRODUCT_GRID_SPACING.itemHorizontalPadding : 0,
+                            marginBottom: PRODUCT_GRID_SPACING.itemVerticalMargin,
+                          }}
+                        >
+                          <CardProduct producto={producto} />
+                        </View>
+                      );
+                    })}
                   </View>
                 </ScrollView>
                 {productosFiltrados.length === 0 ? (
