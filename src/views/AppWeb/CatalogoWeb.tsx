@@ -1,6 +1,7 @@
 import AppFooter from "@/components/AppFooter";
 import AppHeader from "@/components/AppHeader";
 import { CardProduct } from "@/components/CardProduct";
+import { usePlatform } from "@/hooks/usePlatform";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -12,7 +13,6 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { usePlatform } from "@/hooks/usePlatform";
 
 type Producto = {
   id: string;
@@ -123,7 +123,12 @@ const secciones = [
   },
 ] as const;
 
-
+const PRODUCT_GRID_SPACING = {
+  itemHorizontalPadding: 8,
+  itemVerticalMargin: 32,
+  desktopWidth: "18.3%",
+  mobileWidth: "47%",
+};
 
 const CatalogoScreen = () => {
   const { width } = useWindowDimensions();
@@ -255,14 +260,15 @@ const CatalogoScreen = () => {
                   nestedScrollEnabled={true}
                   showsVerticalScrollIndicator={true}
                 >
-                  <View className="flex-row flex-wrap gap-x-[1.75%]">
+                  <View className="flex-row flex-wrap">
                     {productosFiltrados.map((producto) => (
                       <View
                         key={producto.id}
                         style={{
-                          width: esDesktop ? "18.6%" : "48.5%",
+                          width: esDesktop ? PRODUCT_GRID_SPACING.desktopWidth : PRODUCT_GRID_SPACING.mobileWidth,
+                          paddingHorizontal: PRODUCT_GRID_SPACING.itemHorizontalPadding,
+                          marginBottom: PRODUCT_GRID_SPACING.itemVerticalMargin,
                         }}
-                        className="mb-20"
                       >
                         <CardProduct producto={producto} />
                       </View>

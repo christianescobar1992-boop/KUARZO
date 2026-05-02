@@ -1,25 +1,24 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 export default function FlutterComponent() {
   const currentYear = new Date().getFullYear();
-  {/*Coment*/ }
+  const { width } = useWindowDimensions();
+  const isMobile = width < 900;
   return (
     <View className="bg-quaternary-950 pt-12 pb-8 mt-4 [40px]">
-      <View className="px-6 flex flex-row">
+      <View className={`px-6 ${isMobile ? 'flex flex-col gap-6' : 'flex flex-row items-start justify-between'}`}>
         {/* LOGO */}
-        <View className="flex-row items-left mb-6 flex flex-col">
+        <View className={`flex-row items-left mb-6 flex flex-col ${isMobile ? 'w-full' : 'w-1/3'}`}>
           <Text className="text-quaternary-500 text-3xl font-extrabold tracking-widest">KUARZO</Text>
           <Text className="text-quaternary-500 text-sm mb-8">
             Joyería exclusiva, piezas de lujo únicas y accesorios para tu estilo diario.
           </Text>
         </View>
 
-
-
         {/* POLITICAS */}
-        <View className="mb-8 flex flex-col mx-20">
+        <View className={`mb-8 flex flex-col ${isMobile ? 'w-full' : 'w-1/3'}`}>
           <Text className="text-quaternary-500 text-xs font-bold uppercase tracking-widest mb-4">Información y Ayuda</Text>
           <View>
             <TouchableOpacity className="mb-3">
@@ -38,16 +37,16 @@ export default function FlutterComponent() {
         </View>
 
         {/* REDES SOCIALES */}
-        <View className="mb-8 flex flex-col">
+        <View className={`mb-8 flex flex-col ${isMobile ? 'w-full' : 'w-1/3'}`}>
           <Text className="text-quaternary-500 text-xs font-bold uppercase tracking-widest mb-4">Nuestras Redes</Text>
-          <View className="flex-row">
-            <TouchableOpacity className="bg-gray-800 p-3 rounded-full mr-4 justify-center items-center">
+          <View className="flex-row flex-wrap gap-3">
+            <TouchableOpacity className="bg-gray-800 p-3 rounded-full justify-center items-center">
               <Ionicons name="logo-instagram" size={20} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity className="bg-gray-800 p-3 rounded-full mr-4 justify-center items-center">
+            <TouchableOpacity className="bg-gray-800 p-3 rounded-full justify-center items-center">
               <Ionicons name="logo-facebook" size={20} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity className="bg-gray-800 p-3 rounded-full mr-4 justify-center items-center">
+            <TouchableOpacity className="bg-gray-800 p-3 rounded-full justify-center items-center">
               <Ionicons name="logo-tiktok" size={20} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity className="bg-gray-800 p-3 rounded-full justify-center items-center">
